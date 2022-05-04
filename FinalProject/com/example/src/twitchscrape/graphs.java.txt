@@ -47,7 +47,7 @@ List<List<Node>> adj_list = new ArrayList<>();
         System.out.println("The contents of the graph:");
         while (src_vertex < list_size) {
             //traverse through the adjacency list and print the edges
-            for (Node edge : graph.adj_list.get(src_vertex)) {
+            for (Node edge: graph.adj_list.get(src_vertex)) {
                 System.out.print("Vertex:" + src_vertex + " ==> " + edge.value + 
                                 " (" + edge.weight + ")\t");
             }
