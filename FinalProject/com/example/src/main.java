@@ -1,4 +1,27 @@
 import java.util.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+
+// Template Class of Tracker for JSoup extraction
+public class Twitch {
+    public static void main(String[] args) throws IOException {
+        Document doc = Jsoup.connect("https://twitchtracker.com/").get();
+        log(doc.title());
+
+        Elements weekStreams  = doc.select("#value-cell div");
+        for (Element streams : weekStreams ) {
+            log("%s\n\t%s", streams.attr("title"), streams.absUrl("href"));
+        }
+    }
+
+    private static void log(String msg, String... vals) {
+        System.out.println(String.format(msg, vals));
+    }
+}
  
 //class to store edges of the weighted graph
 class Edge {
