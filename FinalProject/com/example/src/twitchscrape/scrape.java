@@ -37,11 +37,16 @@ public class scrape {
         ex.printStackTrace();
     }
 
+    graph<Integer> graphObject = new graph<>();
     Map<String, Integer> hmSorted = sortByValue(hm);
     for (Map.Entry<String, Integer> i : hmSorted.entrySet()) {
+        graphObject.addEdge(i.getKey(), i.getValue(),  false);
         System.out.println("Streamer: " + i.getKey() +
                       ", Avg Viewers: " + i.getValue());
+                     
     }
+    System.out.println("\nGraph:\n"
+        + graphObject.printGraph());
 }
 
 public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm)
