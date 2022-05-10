@@ -6,8 +6,8 @@ import org.jsoup.nodes.*;
 
 public class scrape {
     public void scrape(String a){
-        HashMap<String, Integer>
-        hm = new HashMap<String, Integer>();
+        HashMap<String, String>
+        hm = new HashMap<String, String>();
         final String url = a;
     
         try {
@@ -17,7 +17,7 @@ public class scrape {
         
         for (Element row : document.select(
             "table.table-condensed.text-center tr")) {
-            if (row.select("td span.viewers-value").text().equals("")) {
+            if (row.select("td div.meta").first().text().equals("")) {
                 continue;
             }
             else {
@@ -27,8 +27,11 @@ public class scrape {
 
                 final String name = 
                        row.select("td a").text();
+
+                final String game = 
+                       row.select("td div.meta").first().text();
                
-                hm.put(name, views);
+                hm.put(name, game);
                 
             }
         }
@@ -36,37 +39,38 @@ public class scrape {
     catch (Exception ex) {
         ex.printStackTrace();
     }
+    System.out.println(hm);
 
     graph<Integer> graphObject = new graph<>();
-    Map<String, Integer> hmSorted = sortByValue(hm);
-    for (Map.Entry<String, Integer> i : hmSorted.entrySet()) {
-        graphObject.addEdge(i.getKey(), i.getValue(),  false);
+    Map<String, String> hmSorted = sortByValue(hm);
+    for (Map.Entry<String, String> i : hmSorted.entrySet()) {
+        graphObject.addEdge(i.getValue(), i.getKey(),  true);
         System.out.println("Streamer: " + i.getKey() +
-                      ", Avg Viewers: " + i.getValue());
+                      ", Game: " + i.getValue());
                      
     }
     System.out.println("\nGraph:\n"
         + graphObject.printGraph());
 }
 
-public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm)
+public static HashMap<String, String> sortByValue(HashMap<String, String> hm)
 {
     // Create a list from elements of HashMap
-    List<Map.Entry<String, Integer> > list =
-           new LinkedList<Map.Entry<String, Integer> >(hm.entrySet());
+    List<Map.Entry<String, String> > list =
+           new LinkedList<Map.Entry<String, String> >(hm.entrySet());
 
     // Sort the list
-    Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
-        public int compare(Map.Entry<String, Integer> o1,
-                           Map.Entry<String, Integer> o2)
+    Collections.sort(list, new Comparator<Map.Entry<String, String> >() {
+        public int compare(Map.Entry<String, String> o1,
+                           Map.Entry<String, String> o2)
         {
             return (o1.getValue()).compareTo(o2.getValue());
         }
     });
      
     // put data from sorted list to hashmap
-    HashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
-    for (Map.Entry<String, Integer> aa : list) {
+    HashMap<String, String> temp = new LinkedHashMap<String, String>();
+    for (Map.Entry<String, String> aa : list) {
         temp.put(aa.getKey(), aa.getValue());
     }
     return temp;
