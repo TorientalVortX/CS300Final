@@ -17,12 +17,12 @@ public class scrape {
         
         for (Element row : document.select(
             "table.table-condensed.text-center tr")) {
-            if (row.select("td.color-viewers").text().equals("")) {
+            if (row.select("td.viewers-value").text().equals("")) {
                 continue;
             }
             else {
                 final String tempViews = 
-                       row.select("td.color-viewers").text();
+                       row.select("td span.viewers-value").text();
                 final Integer views = Integer.parseInt(tempViews);
 
                 final String name = 
