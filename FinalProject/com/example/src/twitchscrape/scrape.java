@@ -17,7 +17,7 @@ public class scrape {
         
         for (Element row : document.select(
             "table.table-condensed.text-center tr")) {
-            if (row.select("td.viewers-value").text().equals("")) {
+            if (row.select("td span.viewers-value").text().equals("")) {
                 continue;
             }
             else {
