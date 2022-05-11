@@ -47,7 +47,7 @@ public class scrape {
     graph<Integer> graphObject = new graph<>();
     Map<String, String> hmSorted = sortByValue(hm);
     for (Map.Entry<String, String> i : hmSorted.entrySet()) {
-        graphObject.addEdge(i.getValue(), i.getKey(),  false);
+        graphObject.addEdge(i.getValue(), i.getKey(),  true);
         System.out.println("Streamer: " + i.getKey() +
                       ", Game: " + i.getValue());
                      
@@ -83,7 +83,4 @@ public static HashMap<String, String> sortByValue(HashMap<String, String> hm)
     }
     return temp;
 }
-
-
-
 }
