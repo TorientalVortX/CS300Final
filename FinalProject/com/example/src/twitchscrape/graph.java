@@ -1,6 +1,8 @@
 package twitchscrape;
 
 import java.util.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.*;
 
 public class graph<T> {
     private Map<T, List<T>> graph = new HashMap<>();
@@ -35,12 +37,22 @@ public class graph<T> {
             System.out.println("The Graph has no edge between " + source + " and " + destination);
         }
     }
-
-    public String printGraph() {
+    
+    public String printGraph(String a) {
         StringBuilder builder = new StringBuilder();
-
+        final String url = a;
+        final Document document = Jsoup.connect(url).get();
+        for (Element row : document.select(
+            "table.table-condensed.text-center tr")) {
+            if (row.select("td div.meta").first().text().equals("")) {
+                continue;
+            }
+            else {
+                final String tempViews = 
+                       row.select("td span.viewers-value").text();
+            }
         for(T vertex : graph.keySet()) {
-            builder.append("\n" + vertex.toString() + " --> ");
+            builder.append("\n" + vertex.toString() + " is now streaming with" + Arrays.toString(row) + "viewers");
             for(T node: graph.get(vertex)) {
                 builder.append(node.toString() + " ");
             }
@@ -48,8 +60,9 @@ public class graph<T> {
         }
         return builder.toString();
     }
-
-    private void addVertex(T vertex) {
-        graph.put(vertex, new LinkedList<T>());
+    
+        private void addVertex(T vertex) {
+            graph.put(vertex, new LinkedList<T>());
+        }
     }
 }
