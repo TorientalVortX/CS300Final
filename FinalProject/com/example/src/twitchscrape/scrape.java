@@ -9,6 +9,8 @@ public class scrape {
         HashMap<String, String>
         hm = new HashMap<String, String>();
         final String url = a;
+        List<String[]> streamers = new ArrayList<String[]>();
+        int y = 0;
     
         try {
         final Document document = Jsoup.connect(url).get();
@@ -30,7 +32,8 @@ public class scrape {
 
                 final String game = 
                        row.select("td div.meta").first().text();
-               
+                
+                streamers.add(new String[] { name, game, tempViews });
                 hm.put(name, game);
                 
             }
@@ -44,13 +47,18 @@ public class scrape {
     graph<Integer> graphObject = new graph<>();
     Map<String, String> hmSorted = sortByValue(hm);
     for (Map.Entry<String, String> i : hmSorted.entrySet()) {
-        graphObject.addEdge(i.getValue(), i.getKey(),  true);
+        graphObject.addEdge(i.getValue(), i.getKey(),  false);
         System.out.println("Streamer: " + i.getKey() +
                       ", Game: " + i.getValue());
                      
     }
     System.out.println("\nGraph:\n"
         + graphObject.printGraph());
+
+    for (String[] row : streamers) {
+        y++;
+        System.out.println("Streamer #" + y + " = " + Arrays.toString(row));
+    }
 }
 
 public static HashMap<String, String> sortByValue(HashMap<String, String> hm)
