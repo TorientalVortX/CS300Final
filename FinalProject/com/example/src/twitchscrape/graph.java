@@ -40,7 +40,7 @@ public class graph<T> {
         StringBuilder builder = new StringBuilder();
 
         for(T vertex : graph.keySet()) {
-            builder.append("\n" + vertex.toString() + "->");
+            builder.append("\n" + vertex.toString() + " --> ");
             for(T node: graph.get(vertex)) {
                 builder.append(node.toString() + " ");
             }
