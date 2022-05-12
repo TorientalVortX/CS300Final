@@ -8,9 +8,11 @@ public class scrape {
     public void scrape(String a){
         HashMap<String, String>
         hm = new HashMap<String, String>();
+        HashMap<String, List<String[]>>
+        hm2 = new HashMap<String, List<String[]>>();
+
         final String url = a;
         List<String[]> streamers = new ArrayList<String[]>();
-        int y = 0;
     
         try {
         final Document document = Jsoup.connect(url).get();
@@ -35,6 +37,7 @@ public class scrape {
                 
                 streamers.add(new String[] { name, game, tempViews });
                 hm.put(name, game);
+                hm2.put(name,streamers);
                 
             }
         }
@@ -42,22 +45,22 @@ public class scrape {
     catch (Exception ex) {
         ex.printStackTrace();
     }
-    System.out.println(hm);
+
 
     graph<Integer> graphObject = new graph<>();
+    Map<String, List<String[]>> hm2ref = hm2;
     Map<String, String> hmSorted = sortByValue(hm);
     for (Map.Entry<String, String> i : hmSorted.entrySet()) {
-        graphObject.addEdge(i.getValue(), i.getKey(),  true);
+        graphObject.addEdge(i.getValue(), i.getKey(),  false);
         System.out.println("Streamer: " + i.getKey() +
                       ", Game: " + i.getValue());
                      
     }
     System.out.println("\nGraph:\n"
-        + graphObject.printGraph());
+        + graphObject.printGraph(hm2ref));
 
     for (String[] row : streamers) {
-        y++;
-        System.out.println("Streamer #" + y + " = " + Arrays.toString(row));
+        System.out.println("Streamer " + row[0] + " | Map Connections: | Game: " + row[1] + " | Current Views: " + row[2]);
     }
 }
 
@@ -83,4 +86,7 @@ public static HashMap<String, String> sortByValue(HashMap<String, String> hm)
     }
     return temp;
 }
+
+
+
 }

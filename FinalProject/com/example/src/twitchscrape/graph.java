@@ -1,11 +1,11 @@
 package twitchscrape;
 
 import java.util.*;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.*;
+import java.util.Map.Entry;
 
 public class graph<T> {
     private Map<T, List<T>> graph = new HashMap<>();
+
 
     public void addEdge(String source, String destination, boolean biDirectional) {
         if (!graph.containsKey(source)) {
@@ -37,32 +37,43 @@ public class graph<T> {
             System.out.println("The Graph has no edge between " + source + " and " + destination);
         }
     }
-    
-    public String printGraph(String a) {
+
+    public String printGraph(Map<String, List<String[]>> streamers) {
         StringBuilder builder = new StringBuilder();
-        final String url = a;
-        final Document document = Jsoup.connect(url).get();
-        for (Element row : document.select(
-            "table.table-condensed.text-center tr")) {
-            if (row.select("td div.meta").first().text().equals("")) {
-                continue;
+
+        for(T vertex : graph.keySet()) {          
+            
+            // for (Entry<String, List<String[]>> i : streamers.entrySet()) {
+            //     for (String[] row : i.getValue()) {
+            //         System.out.println("Streamer: " + i.getKey() +
+            //                   ", Info: " + i.getValue());
+            //     }            
+            // }
+    
+            try {
+                Set<String> keys = streamers.keySet();
+                // System.out.println(keys);
+                if (keys.contains(vertex)) {
+                    continue;
+                }
+                else
+                    builder.append("\n" + vertex.toString() + " --> ");
+                    for(T node: graph.get(vertex)) {
+                        builder.append(node.toString() + " ");
+                    }
+                    builder.append("\n");    
+                    
+                
+            }   
+            catch (Exception e) {
+                System.out.println("\nException caught");
             }
-            else {
-                final String tempViews = 
-                       row.select("td span.viewers-value").text();
-            }
-        for(T vertex : graph.keySet()) {
-            builder.append("\n" + vertex.toString() + " is now streaming with" + Arrays.toString(row) + "viewers");
-            for(T node: graph.get(vertex)) {
-                builder.append(node.toString() + " ");
-            }
-            builder.append("\n");
+            
         }
         return builder.toString();
     }
-    
-        private void addVertex(T vertex) {
-            graph.put(vertex, new LinkedList<T>());
-        }
+
+    private void addVertex(T vertex) {
+        graph.put(vertex, new LinkedList<T>());
     }
 }
